@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> CS180 Project 2 Image Gallery</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: "Times New Roman", Times, serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        header {
+            background-color: #f4f4f4;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 2px solid #4b4b4b;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            color: #000000;
+        }
+        header h2 {
+            margin-top: 10px;
+            font-size: 1.5em;
+            color: #000000;
+        }
+        header p {
+            margin-top: 15px;
+            margin-bottom: 20px;
+            font-size: 1em;
+            color: #000000;
+        }
+        .gallery-container {
+            margin: 40px;
+            border: 10px solid #d4af37;
+            border-radius: 15px;
+            background: #f3e9dc;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5),
+                        0 0 0 15px rgba(228, 228, 227, 0.6),
+                        inset 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+        /* Grid layout for three images */
+        .three-images {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3 equal columns */
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        /* Grid layout for two images */
+        .two-images {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3 equal columns */
+            gap: 10px;
+        }
+        /* Center the two images in the grid by leaving an empty column on both sides */
+        .two-images .image-item:nth-child(1) {
+            grid-column: 2 / 3; /* First image goes in the center column */
+        }
+        .two-images .image-item:nth-child(2) {
+            grid-column: 3 / 4; /* Second image in the third column */
+        }
+        /* Shared image item styling */
+        .image-item img {
+            width: 100%;
+            height: auto;
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: cover;
+            border-radius: 0; /* Removes rounded corners */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        }
+        .gallery-header {
+            grid-column: span 3; /* Header spans all columns */
+            text-align: center;
+            margin-bottom: 5px;
+        }
+        .gallery-header h3 {
+            margin: 0;
+            font-size: 1.2em;
+            color: #000000;
+        }
+        .gallery-header p {
+            margin: 40px;
+            margin-top: 5px;
+            margin-bottom: 20px;
+            font-size: 1em;
+            color: #000000;
+        }
+        .description {
+            margin-top: 5px;
+            font-size: 14px;
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .discussion-section {
+            background-color: #f9f9f9;
+            padding-left: 250px;
+            padding-right: 250px;
+            margin-top: 10px;
+        }
+        .discussion-section h2 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000000;
+        }
+        .discussion-section p {
+            font-size: 1em;
+            color: #000000;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <h1> Image Frequencies and Combinations </h1>
+        <h2> CS180, Joshua Liao </h2>
+        <p> </p>
+    </header>
+
+    <!-- Base images -->
+    <div class="gallery-container">
+        <div class="gallery-header">
+            <h3> Background </h3>
+            <p>
+                Frequency domain analysis doesn't just exist for audio signals, but also for visual signals! <br>
+                This project shows some of the interesting visual consequences when you play with the mathematics of visual signals.
+        </p>
+        </div>
+    </div>
+
+    <!-- Image Gallery Section -->
+    <div class="gallery-container">
+        <div class="gallery-header">
+            <h3> Part 1.1: Filters </h3>
+            You can use finite difference filters as proxies for partial derivatives.
+            <br> By convolving an image 
+            with the filters below, you get a matrix whose values represent the difference between adjacent pixels!
+            <br> \( D_y  = \begin{bmatrix} 1 & -1 \end{bmatrix}, D_y  = \begin{bmatrix} 1 \\ -1 \end{bmatrix} \)
+            </p>
+        </div>
+
+        <!-- Original Cameraman -->
+        <div class="three-images">
+            <div class="image-item">
+                <img src="images/data/cameraman.png" alt="Description of Image 1">
+                <div class="description"> 
+                    This is the original, greyscale 'Cameraman' image (white border artifacts included).
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/cameraman/dx.jpg" alt="Description of Image 2">
+                <div class="description"> 
+                    Convolution with \( D_x \)
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/cameraman/dy.jpg" alt="Description of Image 3">
+                <div class="description"> 
+                    Convolution with \( D_y \) 
+                </div>
+            </div>
+        </div>
+
+        <!-- More Cameraman -->
+        <div class="two-images">
+            <div class="image-item">
+                <img src="images/cameraman/magnitude_grad.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    This is the magnitude of the gradient, derived from \( sqrt(D_x^2 + D_y^2) \).
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/cameraman/magnitude_grad_binary.jpg" alt="Description of Image 2">
+                <div class="description"> 
+                    By binarizing the gradient using a threshold value, <br>
+                    we can see where the foreground edges are (locations of high gradient).
+                    <br> (threshold qualitatively determined as 60 out of 255).
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Gallery Section -->
+    <div class="gallery-container">
+        <div class="gallery-header">
+            <h3> Part 1.2: Gaussians </h3>
+            Note that the finite difference filter is prone to noise in the edge image.
+            <br> We can fix that by using a Gaussian filter to blur the image beforehand, eliminating noise, 
+            and then applying the finite difference filters.
+            </p>
+        </div>
+
+        <!-- blurred Cameraman -->
+        <div class="three-images">
+            <div class="image-item">
+                <img src="images/cameraman/blurred.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    We start with a blurred image by convolving with a Gaussian filter. 
+                    <br> kernel size = 8 and sig = 6, ie. three standard deviations in all directions lie in the filter.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/cameraman/gaussian_dx.jpg" alt="Description of Image 2">
+                <div class="description"> 
+                    Convolution with \( D_x \). We can see the lines are "thicker"; this is because of blurring. 
+                    <br> The image's original edges have a 'wider scope' of influence.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/cameraman/gaussian_dy.jpg" alt="Description of Image 3">
+                <div class="description"> 
+                    Convolution with \( D_y \). Similarly, thicker edges.
+                </div>
+            </div>
+        </div>
+
+        <!-- More Cameraman -->
+        <div class="three-images">
+            <div class="image-item">
+                <img src="images/cameraman/gauss_grad.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    Magnitude of the gradient, derived from \( sqrt(D_x^2 + D_y^2) \). <br>
+                    Note that it looks smoother, and noise at the bottom of the image goes away.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/cameraman/guass_grad_binary.jpg" alt="Description of Image 2">
+                <div class="description"> 
+                    Binarized gradient. This time, the threshold is 20.
+                    <br> Blurring averages out values, making high values / outliers less present, meaning that
+                    the threshold can be lower. There are less noisy edges found.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/cameraman/gauss_conv_binary.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    Convolution is an associative operation. Thus, you can convolve the dx, dy finite difference operators 
+                    with the Gaussian used to blur, and then convolve with the original image to get the same result shown here.
+                </div>
+            </div>
+        </div>
+    </div>
+
+     <!-- Image Gallery Section -->
+     <div class="gallery-container">
+        <div class="gallery-header">
+            <h3> Part 2.1: Sharpening </h3>
+            Gaussian filters blur the image— in other words, they remove high frequencies, or serve as a low-pass filter.
+            <br> 
+            How do we get the high frequencies? We can just subtract the low frequencies! Sharpening is a technique where you add more high frequencies back into
+            an image to "sharpen" its details. 
+            <br>
+            FAQ: What are high frequencies in images? High frequencies mean signals that change more quickly. <br>
+            In the visual domain, this is most easily visualized by edges, which represent sudden changes (as opposed to gradual change).
+            </p>
+        </div>
+
+        <!-- Taj -->
+        <div class="three-images">
+            <div class="image-item">
+                <img src="images/data/taj.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    This is the original image of the Taj Mahal.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/sharp/taj/taj_lowfreq.jpg" alt="Description of Image 2">
+                <div class="description"> 
+                    After convolution with a Gaussian, we can get a low-freq copy.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/sharp/taj/taj_highfreq.jpg" alt="Description of Image 3">
+                <div class="description"> 
+                    When you subtract the low frequencies from the original, you get high frequencies.
+                </div>
+            </div>
+        </div>
+
+        <!--  -->
+        <div class="three-images">
+            <div class="image-item">
+                <img src="images/data/taj.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    Original, for comparison.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/sharp/taj/taj_sharp.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    Sharpened Taj Mahal: alpha = 1, gaussian kernel = 21, sigma = 21/6.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/sharp/taj/taj_conv_sharp.jpg" alt="Description of Image 2">
+                <div class="description"> 
+                    Similar to before, some clever maths allow us to represent the whole operation with one convolution,
+                    instead of subtracting large images. <br> Here's the same result using one convolution.
+                </div>
+            </div>
+        </div>
+
+        <div class="two-images">
+            <div class="image-item">
+                <img src="images/sharp/taj/taj_highfreq_noclip.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    Bonus: Here's the raw high frequency image. <br>
+                    
+                    What's with the color artifacts? When you subtract the low frequencies,
+                    it's possible to get pixel values outside the normal bounds of [0, 255]. The image then looks very strange!
+                    For visualization, the high frequency is clipped to these bounds to look nicer. 
+                    However, in the actual operation / math, this intermediate clipping is not executed until the final result.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/sharp/taj/taj_clipped_sharp.jpg" alt="Description of Image 2">
+                <div class="description"> 
+                    What if you do clip in intermediate operations? <br>
+                    (If you subtract and end up negative, clip to zero, then add, you get a different result than if you skip the clipping.)
+                    Here's the sharpened Taj when you perform intermediate clipping on the high frequency image. It looks less sharp! 
+                    This is probably because the raw pixel difference in the high frequency image was a negative value or over 255; the 
+                    true range of variation/difference was lost when the values were clipped.
+                </div>
+            </div>
+        </div>
+
+        <div class="three-images">
+            <div class="image-item">
+                <img src="images/sharp/raccoon/raccoon_original.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    Here's a raccoon.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/sharp/raccoon/raccoon_highfreq.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    The high frequency parts of the raccoon.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/sharp/raccoon/raccoon_sharp.jpg" alt="Description of Image 2">
+                <div class="description"> 
+                    Add them together for a sharper raccoon.
+                </div>
+            </div>
+        </div>
+
+        <div class="three-images">
+            <div class="image-item">
+                <img src="images/sharp/shiba/shiba_original.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    Here's a shiba.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/sharp/shiba/shiba_highfreq.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    The high frequency parts of the shiba.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/sharp/shiba/shiba_sharp.jpg" alt="Description of Image 2">
+                <div class="description"> 
+                    Add them together for a sharper shiba.
+                </div>
+            </div>
+        </div>
+
+        <div class="three-images">
+            <div class="image-item">
+                <img src="images/sharp/cat/cat_original.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    Here's a cat.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/sharp/cat/cat_highfreq.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    The high frequency parts of the cat (and the bike).
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/sharp/cat/cat_sharp.jpg" alt="Description of Image 2">
+                <div class="description"> 
+                    Add them together for a sharper cat.
+                </div>
+            </div>
+        </div>
+
+        <div class="two-images">
+            <div class="image-item">
+                <img src="images/sharp/cat/cat_lowfreq.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                   Bonus image of low frequency cat.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/sharp/resharp_conv_cat.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    This is the result of re-sharpening a sharpened image! 
+                    <br> The sharper cat image above this one was blurred, then subtracted away from the sharp cat to 
+                    get a second degree of sharp detail. In some areas, this detail is pretty nice— for example,
+                    the fur on the cat is very detailed. However, the image as whole looks a bit fried.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="gallery-container">
+        <div class="gallery-header">
+            <h3> Part 2.2: Hybrid Images </h3>
+            Hybrid images play with human perception by encoding one image at a high frequency, 
+            and then another image at a low frequency. Try looking at the following images from close up, observing the 
+            fine details encoded at high frequencies, then looking from far away, when the human perception no longer 
+            registers the higher frequencies and sees the low frequency image instead.
+            <br> All hybrid images were generated by a len 25 Gaussian filter, low_sigma = 25/6, high_sigma = 25/8.
+            </p>
+        </div>
+
+        <!-- nutmeg derek -->
+        <div class="three-images">
+            <div class="image-item">
+                <img src="images/data/derek.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    Here is Derek...
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/data/nutmeg.jpg" alt="Description of Image 2">
+                <div class="description"> 
+                    And here is Nutmeg...
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/hybrid/derek_nutmeg.jpg" alt="Description of Image 3">
+                <div class="description"> 
+                    Here is the hybrid image of Nutmeg on top of Derek. Close up, Derek has catlike features, but far away,
+                    you can see just Derek.
+                </div>
+            </div>
+        </div>
+
+        <!-- dual ball -->
+        <div class="two-images">
+            <div class="image-item">
+                <img src="images/hybrid/bnw/color_low.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                   Bells and Whistles: <br>
+                   Let's examine how color works for hybrid images. Here, the low frequencies are colored, 
+                   while the high frequencies are processed in greyscale. Coloring works here because low frequencies capture
+                   illumination and larger local region trends.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/hybrid/bnw/color_high.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    And here, the high frequencies are colored, while low frequencies are greyscale. Coloring doesn't work with
+                    only high frequencies, because high frequencies inherently represent rapid change in visual data. 
+                </div>
+            </div>
+        </div>
+
+        <!-- obama -->
+        <div class="three-images">
+            <div class="image-item">
+                <img src="images/data/obama_smile.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    Here is President Obama smiling.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/data/obama_stern.jpg" alt="Description of Image 2">
+                <div class="description"> 
+                    Here is President Obama being stern.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/hybrid/obama.jpg" alt="Description of Image 3">
+                <div class="description"> 
+                    Here is a hybrid of Obama. Close up, Obama appears stern. But as you go farther away, you can tell that 
+                    he is really smiling. This image highlights another key implementation detail for hybrid images: 
+                    when you select images, the image size and background should be similar— otherwise you get artifacts like seen
+                    here because stern Obama had to be rotated to match smiling obama.
+                </div>
+            </div>
+        </div>
+
+        <!-- dual ball -->
+        <div class="three-images">
+            <div class="image-item">
+                <img src="images/data/basketball.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    Basketball.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/data/soccer.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    Soccerball.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/hybrid/dual_ball.jpg" alt="Description of Image 2">
+                <div class="description"> 
+                    A basketball superimposed onto a soccerball. 
+                    <br> This hybrid image is not quite as successful as Derek-Nutmeg. The reason for this failure is 
+                    because when you make hybrid images, you need to consider perception as whole— and of course, while the shape
+                    fits here, the colors don't really work. The texture of the basketball can only be seen while 
+                    close to the image, but the colors aren't carried over.
+                </div>
+            </div>
+        </div>
+
+        <!-- low - high dual ball -->
+        <div class="two-images">
+            <div class="image-item">
+                <img src="images/hybrid/dual_ball_low.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    Let's look into the hybrid image process. Here is the low frequency portion,
+                    where the soccerball goes through a low-pass filter. 
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/hybrid/dual_ball_high.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    Here is a high-pass filtered basketball. <br>
+                    (Remember, these color artifacts come from not clipping in intermediate steps.)
+                </div>
+            </div>
+        </div>
+
+        <div class="two-images">
+            <div class="image-item">
+                <img src="images/hybrid/fft/fft_low.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    This is the frequency representation of the original soccerball, using FFT.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/hybrid/fft/fft_high.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                   This is the frequency representation of the basketball.
+                </div>
+            </div>
+        </div>
+
+        <div class="two-images">
+            <div class="image-item">
+                <img src="images/hybrid/fft/fft_lowpass.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    The FFT frequency representation of the low-pass'ed soccerball.
+                    <br> Note how many of the frequencies are now gone.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/hybrid/fft/fft_highpass.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    The FFT frequency representation of the high-pass'ed basketball.
+                    <br> Note how the amplitude graph is brighter now.
+                </div>
+            </div>
+        </div>
+
+        <div class="two-images">
+            <div class="image-item">
+                <img src="images/hybrid/fft/fft_hybrid.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    Finally, the FFT representation of the hybrid image. <br>
+                    You can track the diagonal line present in the high pass image FFT's showing up here.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="gallery-container">
+        <div class="gallery-header">
+            <h3> Part 2.3, 2.4: Blending the Oraple </h3>
+            As described in the 1983 paper by Burt and Adelson. We show some results in image blending.
+            <br> Specifically, using a Laplacian stack of two images and a mask, and then blending images at each level at the stack to create
+            a seamless blended image. 
+            </p>
+        </div>
+
+        <div class="two-images">
+            <div class="image-item">
+                <img src="images/data/apple.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    The original apple!
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/data/orange.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                   The orange-nal orange!
+                </div>
+            </div>
+        </div>
+
+        <!-- apple -->
+        <div class="three-images">
+            <div class="image-item">
+                <img src="images/stacks/apple_gauss0.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    Apple 0 in the Gaussian stack.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/stacks/apple_gauss2.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    Apple 2 in Gaussian stack.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/stacks/apple_gauss4.jpg" alt="Description of Image 2">
+                <div class="description"> 
+                    Apple 4 in Gaussian stack.
+                </div>
+            </div>
+        </div>
+
+         <!-- orange -->
+         <div class="three-images">
+            <div class="image-item">
+                <img src="images/stacks/orange_gauss0.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    Orange 0 in the Gaussian stack.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/stacks/orange_gauss2.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    Orange 2 in Gaussian stack.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/stacks/orange_gauss4.jpg" alt="Description of Image 2">
+                <div class="description"> 
+                    Orange 4 in Gaussian stack.
+                </div>
+            </div>
+        </div>
+
+        <!-- apple -->
+        <div class="three-images">
+            <div class="image-item">
+                <img src="images/stacks/apple_laplace0.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    Apple 0 in laplacian stack.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/stacks/apple_laplace2.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    Apple 2 in laplacian stack.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/stacks/apple_laplace4.jpg" alt="Description of Image 2">
+                <div class="description"> 
+                    Apple 4 in laplacian stack.
+                </div>
+            </div>
+        </div>
+
+        <!-- orange -->
+        <div class="three-images">
+            <div class="image-item">
+                <img src="images/stacks/orange_laplace0.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    Orange 0 in laplacian stack.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/stacks/orange_laplace2.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    Orange 2 in laplacian stack.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/stacks/orange_laplace4.jpg" alt="Description of Image 2">
+                <div class="description"> 
+                    Orange 4 in laplacian stack.
+                </div>
+            </div>
+        </div>
+
+        <!-- oraple -->
+        <div class="three-images">
+            <div class="image-item">
+                <img src="images/oraple/oraple0.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    Oraple 0 in laplacian stack. (This is unclipped)
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/oraple/oraple2.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    Oraple 2 in laplacian stack. (This is unclipped)
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/oraple/oraple4.jpg" alt="Description of Image 2">
+                <div class="description"> 
+                    Oraple 4 in laplacian stack. (This is unclipped)
+                </div>
+            </div>
+        </div>
+
+        <!-- orange -->
+        <div class="two-images">
+            <div class="image-item">
+                <img src="images/oraple/oraple_final.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    The reconstructed Oraple, found by collapsing the Oraple laplacian stack!
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="gallery-container">
+        <div class="gallery-header">
+            <h3> More Splines </h3>
+            Here are some more image blends for entertainment.
+            <br>
+            Some of these images are not-quite-so seamless, for which we can only blame the lack of precision in 
+            finding two images that map onto each other well, along with an rough filter.
+            </p>
+        </div>
+
+        <div class="three-images">
+            <div class="image-item">
+                <img src="images/spline/angy.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    Here is an 'angy' cat.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/spline/dog.jpg" alt="Description of Image 2">
+                <div class="description"> 
+                    Here is a dog looking out of a car.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/spline/mask2.jpg" alt="Description of Image 2">
+                <div class="description"> 
+                    The mask used to isolate the dog's face.
+                </div>
+            </div>
+            
+        </div>
+
+        <div class="two-images">
+            <div class="image-item">
+                <img src="images/spline/angydog.jpg" alt="Description of Image 3">
+                <div class="description"> 
+                    This is the result of blending the three above together.
+                </div>
+            </div>
+        </div>
+
+        <div class="three-images">
+            <div class="image-item">
+                <img src="images/spline/obama.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    Here is Obama.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/spline/cat.jpg" alt="Description of Image 2">
+                <div class="description"> 
+                    Here is a cat.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/spline/mask.jpg" alt="Description of Image 2">
+                <div class="description"> 
+                    The mask used.
+                </div>
+            </div>
+        </div>
+
+        <div class="two-images">
+            <div class="image-item">
+                <img src="images/spline/obamacat.jpg" alt="Description of Image 3">
+                <div class="description"> 
+                    This is the result of blending the three above together.
+                </div>
+            </div>
+        </div>
+    </div>
+        
+
+    <!-- Blog-Style Discussion Section
+    <div class="discussion-section">
+        <h2>Discussion</h2>
+        <p>Welcome to the discussion section of the gallery! This space is dedicated to exploring the stories and inspirations behind the images featured above. Feel free to engage with the content, reflect on the themes, and share your thoughts on the visual narratives presented. Photography is not just about capturing a moment; it's about creating a dialogue between the image and the viewer. What emotions do these images evoke in you? What stories do you see unfolding in each frame? Let's dive into the discussion and explore the artistic journey behind each shot.</p>
+    </div> -->
+
+</body>
+</html>
