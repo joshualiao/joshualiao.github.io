@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> CS180 Project 3 Image Gallery</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: "Times New Roman", Times, serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        header {
+            background-color: #f4f4f4;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 2px solid #4b4b4b;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            color: #000000;
+        }
+        header h2 {
+            margin-top: 10px;
+            font-size: 1.5em;
+            color: #000000;
+        }
+        header p {
+            margin-top: 15px;
+            margin-bottom: 20px;
+            font-size: 1em;
+            color: #000000;
+        }
+        .gallery-container {
+            margin: 40px;
+            border: 10px solid #d4af37;
+            border-radius: 15px;
+            background: #f3e9dc;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5),
+                        0 0 0 15px rgba(228, 228, 227, 0.6),
+                        inset 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+        /* Grid layout for three images */
+        .three-images {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3 equal columns */
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        /* Grid layout for two images */
+        .two-images {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3 equal columns */
+            gap: 10px;
+        }
+        /* Center the two images in the grid by leaving an empty column on both sides */
+        .two-images .image-item:nth-child(1) {
+            grid-column: 2 / 3; /* First image goes in the center column */
+        }
+        .two-images .image-item:nth-child(2) {
+            grid-column: 3 / 4; /* Second image in the third column */
+        }
+        /* Shared image item styling */
+        .image-item img {
+            width: 100%;
+            height: auto;
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: cover;
+            border-radius: 0; /* Removes rounded corners */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        }
+        .gallery-header {
+            grid-column: span 3; /* Header spans all columns */
+            text-align: center;
+            margin-bottom: 5px;
+        }
+        .gallery-header h3 {
+            margin: 0;
+            font-size: 1.2em;
+            color: #000000;
+        }
+        .gallery-header p {
+            margin: 40px;
+            margin-top: 5px;
+            margin-bottom: 20px;
+            font-size: 1em;
+            color: #000000;
+        }
+        .description {
+            margin-top: 5px;
+            font-size: 14px;
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .discussion-section {
+            background-color: #f9f9f9;
+            padding-left: 250px;
+            padding-right: 250px;
+            margin-top: 10px;
+        }
+        .discussion-section h2 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000000;
+        }
+        .discussion-section p {
+            font-size: 1em;
+            color: #000000;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <h1> Morphmen: Face Morphs </h1>
+        <h2> CS180, Joshua Liao </h2>
+        <p> </p>
+    </header>
+
+    <!-- Base images -->
+    <div class="gallery-container">
+        <div class="gallery-header">
+            <h3> Background </h3>
+            <p>
+                By interpolating both shape and color, you can create smooth facial morphs between faces. 
+
+        </p>
+        </div>
+    </div>
+
+    <!-- Image Gallery Section -->
+    <div class="gallery-container">
+        <div class="gallery-header">
+            <h3> Part 1 Correspondance </h3>
+            To get a nice facial morph, you need to manually annotate correspondance points between two images.
+            By marking eyes, nose, mouth, and other key anchor points, individual parts of the face can be interpolated. 
+            This is done by separating the image into a triangular mesh, and interpolating each triangle.
+            I used the provided correspondance tool here: https://cal-cs180.github.io/fa23/hw/proj3/tool.html.
+
+            </p>
+        </div>
+    </div>
+
+    <!-- Image Gallery Section -->
+    <div class="gallery-container">
+        <div class="gallery-header">
+            <h3> Supermen </h3>
+            There are two famous Supermen (non-exhaustive list)... what would their midway face look like?
+            <br>
+            These images were taken out of Google search, and edited in Adobe Photoshop for background removal and alignment.
+            No other image tools were used, everything else is math!
+            </p>
+        </div>
+
+        <!-- blurred Cameraman -->
+        <div class="three-images">
+            <div class="image-item">
+                <img src="images/reeves.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    Christoper Reeves
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/midway.jpg" alt="Description of Image 2">
+                <div class="description"> 
+                    Henry Reeve? Christopher Cavill? The Super-est Man
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/cavill.jpg" alt="Description of Image 3">
+                <div class="description"> 
+                    Henry Cavill
+                </div>
+            </div>
+        </div>
+
+        <div class="two-images">
+            <div class="image-item">
+                <img src="images/cavill_to_reeves-edited.gif" alt="Description of Image 1">
+                <div class="description"> 
+                    GIF morph.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="gallery-container">
+        <div class="gallery-header">
+            <h3> Bells and Whistles: Batmen </h3>
+            <p>
+                Do you know how many Batman live-action actors there have been? Can you name them all? 
+                Watch the transformation of the Batmen over the cinema-ages.
+                <br>
+                <a href="https://youtu.be/SpQpuAkVhtw">https://youtu.be/SpQpuAkVhtw</a>
+        </p>
+        </div>
+    </div>
+
+     <!-- Image Gallery Section -->
+     <div class="gallery-container">
+        <div class="gallery-header">
+            <h3> The Mean Face </h3>
+            Using 100 individuals from the FEI database, we can construct the "mean face"— what does the average person look like?
+            Do you look average? 
+            </p>
+        </div>
+
+        <!-- Taj -->
+        <div class="three-images">
+            <div class="image-item">
+                <img src="images/10a.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    Individual 10, not smiling, from the FEI database.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/11a.jpg" alt="Description of Image 2">
+                <div class="description"> 
+                    Individual 11, not smiling, from the FEI database.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/12a.jpg" alt="Description of Image 3">
+                <div class="description"> 
+                    Individual 12, not smiling, from the FEI database..
+                </div>
+            </div>
+        </div>
+
+        <div class="two-images">
+            <div class="image-item">
+                <img src="images/mean_face.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    The mean face of 100 people. Do you look like this?
+                </div>
+            </div>
+        </div>
+
+        <div class="three-images">
+            <div class="image-item">
+                <img src="images/sample10a.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    This is individual 10 warped to the mean face.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/sample11a.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    This is individiual 11 warped to the mean face.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/sample12a.jpg" alt="Description of Image 2">
+                <div class="description"> 
+                    This is individual 12 warped to the mean face.
+                </div>
+            </div>
+        </div>
+
+        <div class="two-images">
+            <div class="image-item">
+                <img src="images/josh.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                   Hi, this is an old image of me. Annoying that CS180 wants us to publish our faces, but oh well.
+
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/mean_face.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    For reference, this is the mean face again.
+                </div>
+            </div>
+        </div>
+
+        <div class="two-images">
+            <div class="image-item">
+                <img src="images/warp_to_mean.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                   This is me, warped to the mean face. 
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/warp_to_me.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    This is the mean face, warped to my facial shape. An unfortunate result?
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="gallery-container">
+        <div class="gallery-header">
+            <h3> Caricatures </h3>
+            Warps use the following equation: \( \alpha * im1 + (1 - \alpha) * im2 \). Typically, \( \alpha \) 
+            is between 0 and 1 to have a nice weighted average of two images. What happens if we increase it?
+             Take \( \alpha = 2 \), which gives \( 2im1 -1 im2 \). We're subtracting the second image. Following 
+             from the idea of frequencies or sharpening, if we make im2 some kind of population mean, we can sharpen 
+             the features unique to the first image! 
+             <br>
+             With the image I chose, this gives some funny and unfortunate results.
+            </p>
+        </div>
+
+        <!-- nutmeg derek -->
+        <div class="three-images">
+            <div class="image-item">
+                <img src="images/caricature_1.2.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    Alpha = 1.2
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/caricature_1.5.jpg" alt="Description of Image 2">
+                <div class="description"> 
+                    Alpha = 1.5
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/caricature_2.jpg" alt="Description of Image 3">
+                <div class="description"> 
+                    Alpha = 2
+                </div>
+            </div>
+        </div>
+        
+
+    <!-- Blog-Style Discussion Section
+    <div class="discussion-section">
+        <h2>Discussion</h2>
+        <p>Welcome to the discussion section of the gallery! This space is dedicated to exploring the stories and inspirations behind the images featured above. Feel free to engage with the content, reflect on the themes, and share your thoughts on the visual narratives presented. Photography is not just about capturing a moment; it's about creating a dialogue between the image and the viewer. What emotions do these images evoke in you? What stories do you see unfolding in each frame? Let's dive into the discussion and explore the artistic journey behind each shot.</p>
+    </div> -->
+
+</body>
+</html>
