@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> CS180 Project 4a Image Gallery</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: "Times New Roman", Times, serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        header {
+            background-color: #f4f4f4;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 2px solid #4b4b4b;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            color: #000000;
+        }
+        header h2 {
+            margin-top: 10px;
+            font-size: 1.5em;
+            color: #000000;
+        }
+        header p {
+            margin-top: 15px;
+            margin-bottom: 20px;
+            font-size: 1em;
+            color: #000000;
+        }
+        .gallery-container {
+            margin: 40px;
+            border: 10px solid #d4af37;
+            border-radius: 15px;
+            background: #f3e9dc;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5),
+                        0 0 0 15px rgba(228, 228, 227, 0.6),
+                        inset 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+        /* Grid layout for three images */
+        .three-images {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3 equal columns */
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        /* Grid layout for two images */
+        .two-images {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3 equal columns */
+            gap: 10px;
+        }
+        /* Center the two images in the grid by leaving an empty column on both sides */
+        .two-images .image-item:nth-child(1) {
+            grid-column: 2 / 3; /* First image goes in the center column */
+        }
+        .two-images .image-item:nth-child(2) {
+            grid-column: 3 / 4; /* Second image in the third column */
+        }
+        /* Shared image item styling */
+        .image-item img {
+            width: 100%;
+            height: auto;
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: cover;
+            border-radius: 0; /* Removes rounded corners */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        }
+        .gallery-header {
+            grid-column: span 3; /* Header spans all columns */
+            text-align: center;
+            margin-bottom: 5px;
+        }
+        .gallery-header h3 {
+            margin: 0;
+            font-size: 1.2em;
+            color: #000000;
+        }
+        .gallery-header p {
+            margin: 40px;
+            margin-top: 5px;
+            margin-bottom: 20px;
+            font-size: 1em;
+            color: #000000;
+        }
+        .description {
+            margin-top: 5px;
+            font-size: 14px;
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .discussion-section {
+            background-color: #f9f9f9;
+            padding-left: 250px;
+            padding-right: 250px;
+            margin-top: 10px;
+        }
+        .discussion-section h2 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000000;
+        }
+        .discussion-section p {
+            font-size: 1em;
+            color: #000000;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <h1> Mosaics </h1>
+        <h2> CS180, Joshua Liao </h2>
+        <p> </p>
+    </header>
+
+    <!-- Image Gallery Section -->
+    <div class="gallery-container">
+        <div class="gallery-header">
+            <h3> Taking Photos </h3>
+            Images were taken on an iPhone 15 Pro, iOS 17.6.1.
+            Photos were auto-adjusted by Apple's image algorithm; no special settings were used.
+
+            HEIC images were converted to JPG, and downscaled.
+            For example, many images had dimensions 5712 x 4284, and were reduced to 960 x 1280. 
+            A majority of images were taken at aperature value 1.6638.
+            </p>
+        </div>
+
+        <div class="three-images">
+            <div class="image-item">
+                <img src="images/apt1.jpeg" alt="Description of Image 1">
+                <div class="description"> 
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/apt2.jpeg" alt="Description of Image 1">
+                <div class="description"> 
+                    Pictures outside a Berkeley apartment.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/apt3.jpeg" alt="Description of Image 1">
+                <div class="description"> 
+                </div>
+            </div>
+        </div>
+
+        <div class="two-images">
+            <div class="image-item">
+                <img src="images/apt_night1.jpeg" alt="Description of Image 1">
+                <div class="description"> 
+                    At night.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/apt_night2.jpeg" alt="Description of Image 1">
+                <div class="description"> 
+                </div>
+            </div>
+        </div>
+
+        <div class="three-images">
+            <div class="image-item">
+                <img src="images/doe_up.jpeg" alt="Description of Image 1">
+                <div class="description"> 
+                    Doe Library.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/tower_close.jpeg" alt="Description of Image 1">
+                <div class="description"> 
+                    The Campanile.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/chess_club.jpeg" alt="Description of Image 1">
+                <div class="description"> 
+                    A painting by a friend of the Chess Club.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="gallery-container">
+        <div class="gallery-header">
+            <h3> Some Math </h3>
+            A homography is an image transformation given by a full matrix:
+            <br>
+            \(  
+                Hp = p' \rightarrow
+                \begin{pmatrix}
+                a & b & c \\
+                d & e & f \\
+                g & h & 1 
+                \end{pmatrix}
+                \begin{bmatrix}
+                x \\ y \\ 1
+                \end{bmatrix}
+                = 
+                \begin{bmatrix}
+                wx' \\ wy' \\ w
+                \end{bmatrix}
+            \)
+            <br>
+            Note that the bottom right entry of \( H \) is a constant factor 1, and the resulting p' is not the 
+            normal affine coordinate. We can extract \( x', y' \) by dividing
+            by the scaling factor \(w\).
+            <br> 
+            With 8 degrees of freedom (8 variables), we need at least 8 equations to solve this system. Every point
+            consists of two equations, so we need at least 4 points. Because we typically select sample points or correspondances
+            via eyeball or mouse clicking, there is a large amount of noise; just a few pixels off can wildly shift the 
+            homography's mapping. Thus, we select more than 4 points to have an overdetermined system that is solvable by 
+            least squares.
+            <br>
+            Mathematically, we can rearrange the matrix to find our 8 variable system:
+            <br>
+            \(
+            \begin{align}
+                \begin{Bmatrix}
+                ax + by + c &= wx' \\
+                dx + ey + f &= wy' \\
+                gx + hy + 1 &= w 
+                \end{Bmatrix}
+                \\
+                \begin{Bmatrix}
+                ax + by + c &= (gx + hy + 1) x' \\
+                dx + ey + f &= (gx + hy + 1) y' \\
+                \end{Bmatrix}
+                \\
+                \begin{Bmatrix}
+                ax + by + c &= gxx' + hyx' + x' \\
+                dx + ey + f &= gxy' + hyy' + y' \\
+                \end{Bmatrix}
+                \\
+                \begin{Bmatrix}
+                ax + by + c - gxx' - hyx' &= x' \\
+                dx + ey + f - gxy' - hyy' &= y' \\
+                \end{Bmatrix}
+                \\
+                \begin{Bmatrix}
+                ax + by + c + 0 + 0 + 0 - gxx' - hyx' &= x' \\
+                0 + 0 + 0 + dx + ey + f - gxy' - hyy' &= y' \\
+                \end{Bmatrix}
+                \\
+                \begin{Bmatrix}
+                x & y & 1 & 0 & 0 & 0 & xx' & yx' \\
+                0 & 0 & 0 & x & y & 1 & xy' & yy'\\
+                \end{Bmatrix}
+                \begin{bmatrix}
+                a \\ b \\ c \\ d \\ e \\ f \\ g \\ h
+                \end{bmatrix}
+                = 
+                \begin{bmatrix}
+                wx' \\ wy' \\ w
+                \end{bmatrix}
+            \end{align}
+            \)
+            </p>
+        </div>
+    </div>
+
+    <!-- Image Gallery Section -->
+    <div class="gallery-container">
+        <div class="gallery-header">
+            <h3> Image Rectification </h3>
+            Here are some image rectifications!
+            </p>
+        </div>
+
+        <!-- blurred Cameraman -->
+        <div class="three-images">
+            <div class="image-item">
+                <img src="images/chess_club.jpeg" alt="Description of Image 1">
+                <div class="description"> 
+                    Here was the original painting.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/results/rectified_chess_club.jpg" alt="Description of Image 2">
+                <div class="description"> 
+                    Here is the rectified chess club, where we calculate a homography to view 
+                    the painting from a tilted angle from below.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/chess_club_tilt.jpeg" alt="Description of Image 3">
+                <div class="description"> 
+                    For comparison purposes, here is the painting actually seen from below! Minus the actual bottom of the 
+                    painting, which was not visible in the original, head-on persepctive, the rectified image is quite good!
+                </div>
+            </div>
+        </div>
+
+        <div class="two-images">
+            <div class="image-item">
+                <img src="images/doe_up.jpeg" alt="Description of Image 1">
+                <div class="description"> 
+                    Here is Doe Library, from below.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/results/rectified_doe_crop2.jpg" alt="Description of Image 2">
+                <div class="description"> 
+                    Here is a rectification, looking at the same pixels but head-on. We can see some artifacts
+                    that are a result of the original image's perspective.
+                </div>
+            </div>
+        </div>
+    </div>
+
+     <!-- Image Gallery Section -->
+     <div class="gallery-container">
+        <div class="gallery-header">
+            <h3> Mosaic Stitching </h3>
+            <p>
+                We can use image rectification to stitch together mosaics. Correspondances are used to define the 
+                projective transform that warps one image to the same plane as another image; the overlapping region
+                can then be blended together.
+        </p>
+        </div>
+
+        <!-- Taj -->
+        <div class="three-images">
+            <div class="image-item">
+                <img src="images/apt1.jpeg" alt="Description of Image 1">
+                <div class="description"> 
+                    Apartment photo 1
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/results/apt12crop.jpg" alt="Description of Image 3">
+                <div class="description"> 
+                    Apartment photo 1 + 2. 
+                    <br> 
+                    Why does the tree look so weird? The reason is because it is too close;
+                    when it is projected to the same plane as the second image's buildings, it "travels" very far away. Thus,
+                    on the plane of the image, it occupies a comparatively larger area. <br>
+                    Intuitively, an extreme example: if you stick your hand in front of your camera
+                    while looking at the moon, your hand looks larger because it is closer to the camera.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/apt2.jpeg" alt="Description of Image 2">
+                <div class="description"> 
+                    Apartment photo 2
+                </div>
+            </div>
+        </div>
+
+        <div class="three-images">
+            <div class="image-item">
+                <img src="images/apt2.jpeg" alt="Description of Image 1">
+                <div class="description"> 
+                    Apartment photo 2.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/results/apt23crop.jpg" alt="Description of Image 3">
+                <div class="description"> 
+                    Apartment photo 2 + 3.
+                    <br>
+                    Similarly, we can observe that the objects that are closer to the "true image plane" that we perceptually
+                    focus on look better. Everything in line with the row of opposite houses looks pretty good! The bushes
+                    nearby have the same projective warping, from perspective, that the trees before have.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/apt3.jpeg" alt="Description of Image 2">
+                <div class="description"> 
+                    Apartment photo 3.
+                </div>
+            </div>
+        </div>
+
+        <div class="two-images">
+            <div class="image-item">
+                <img src="images/results/onetwothree.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    One super mosaic— the three images were individually stitched together with pairwise correspondances.
+                </div>
+            </div>
+        </div>
+
+        <div class="three-images">
+            <div class="image-item">
+                <img src="images/apt_night1.jpeg" alt="Description of Image 1">
+                <div class="description"> 
+                    Apt at night 1
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/results/aptnightcrop.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    Apt at night. 
+                    <br> 
+                    We can notice here that some automatic light balancing done by the iPhone  
+                    makes the two images have different levels of lighting. When lighting has a larger
+                    difference, normal average-blending methods have noticeable artifacts.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/apt_night2.jpeg" alt="Description of Image 1">
+                <div class="description"> 
+                    Apt at night 2
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
