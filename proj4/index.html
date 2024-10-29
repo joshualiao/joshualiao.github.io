@@ -122,9 +122,11 @@
 
     <!-- Header Section -->
     <header>
-        <h1> Mosaics </h1>
+        <h1> Panos </h1>
         <h2> CS180, Joshua Liao </h2>
-        <p> </p>
+        <p> 
+            Multi-Scale Harris Corners with Adaptive Non-Maximal Suppression + RANSOC
+        </p>
     </header>
 
     <!-- Image Gallery Section -->
@@ -132,11 +134,16 @@
         <div class="gallery-header">
             <h3> Taking Photos </h3>
             Images were taken on an iPhone 15 Pro, iOS 17.6.1.
+            <br>
             Photos were auto-adjusted by Apple's image algorithm; no special settings were used.
-
+            <br>
             HEIC images were converted to JPG, and downscaled.
+            <br>
             For example, many images had dimensions 5712 x 4284, and were reduced to 960 x 1280. 
+            <br>
             A majority of images were taken at aperature value 1.6638.
+            <br><br>
+            Here are some of the photos; these ones have manual corresopndances or points defined for part 4A.
             </p>
         </div>
 
@@ -173,17 +180,11 @@
             </div>
         </div>
 
-        <div class="three-images">
+        <div class="two-images">
             <div class="image-item">
                 <img src="images/doe_up.jpeg" alt="Description of Image 1">
                 <div class="description"> 
                     Doe Library.
-                </div>
-            </div>
-            <div class="image-item">
-                <img src="images/tower_close.jpeg" alt="Description of Image 1">
-                <div class="description"> 
-                    The Campanile.
                 </div>
             </div>
             <div class="image-item">
@@ -197,7 +198,7 @@
 
     <div class="gallery-container">
         <div class="gallery-header">
-            <h3> Some Math </h3>
+            <h3> Extracting Homographies from Points: Some Math </h3>
             A homography is an image transformation given by a full matrix:
             <br>
             \(  
@@ -215,19 +216,23 @@
                 wx' \\ wy' \\ w
                 \end{bmatrix}
             \)
-            <br>
+            <br><br>
             Note that the bottom right entry of \( H \) is a constant factor 1, and the resulting p' is not the 
             normal affine coordinate. We can extract \( x', y' \) by dividing
             by the scaling factor \(w\).
             <br> 
             With 8 degrees of freedom (8 variables), we need at least 8 equations to solve this system. Every point
-            consists of two equations, so we need at least 4 points. Because we typically select sample points or correspondances
-            via eyeball or mouse clicking, there is a large amount of noise; just a few pixels off can wildly shift the 
-            homography's mapping. Thus, we select more than 4 points to have an overdetermined system that is solvable by 
-            least squares.
+            consists of two equations, so we need at least 4 points. 
+            <br>
+            Because we typically select sample points or correspondances
+            via eyeball or mouse clicking, there is a large amount of noise. 
+            <br>
+            Just a few pixels off can wildly shift the homography's mapping. 
+            <br>
+            Thus, we select more than 4 points to have an overdetermined system that is solvable by least squares.
             <br>
             Mathematically, we can rearrange the matrix to find our 8 variable system:
-            <br>
+            <br><br>
             \(
             \begin{align}
                 \begin{Bmatrix}
@@ -305,7 +310,7 @@
             </div>
         </div>
 
-        <div class="two-images">
+        <div class="three-images">
             <div class="image-item">
                 <img src="images/doe_up.jpeg" alt="Description of Image 1">
                 <div class="description"> 
@@ -313,10 +318,17 @@
                 </div>
             </div>
             <div class="image-item">
-                <img src="images/results/rectified_doe_crop2.jpg" alt="Description of Image 2">
+                <img src="images/results/rectified_doe_crop.jpg" alt="Description of Image 2">
                 <div class="description"> 
                     Here is a rectification, looking at the same pixels but head-on. We can see some artifacts
                     that are a result of the original image's perspective.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/results/rectified_doe_zoom.jpg" alt="Description of Image 2">
+                <div class="description"> 
+                    As a side note, here is the actual rectification image; the pixel inaccuracy, as mentioned before, can have
+                    extreme effects on the homography.
                 </div>
             </div>
         </div>
@@ -325,7 +337,7 @@
      <!-- Image Gallery Section -->
      <div class="gallery-container">
         <div class="gallery-header">
-            <h3> Mosaic Stitching </h3>
+            <h3> Mosaic Stitching (Manual) </h3>
             <p>
                 We can use image rectification to stitch together mosaics. Correspondances are used to define the 
                 projective transform that warps one image to the same plane as another image; the overlapping region
@@ -342,9 +354,9 @@
                 </div>
             </div>
             <div class="image-item">
-                <img src="images/results/apt12crop.jpg" alt="Description of Image 3">
+                <img src="images/results/apt12.jpg" alt="Description of Image 3">
                 <div class="description"> 
-                    Apartment photo 1 + 2. 
+                    Apartment photo 1 + 2.
                     <br> 
                     Why does the tree look so weird? The reason is because it is too close;
                     when it is projected to the same plane as the second image's buildings, it "travels" very far away. Thus,
@@ -369,7 +381,7 @@
                 </div>
             </div>
             <div class="image-item">
-                <img src="images/results/apt23crop.jpg" alt="Description of Image 3">
+                <img src="images/results/apt23.jpg" alt="Description of Image 3">
                 <div class="description"> 
                     Apartment photo 2 + 3.
                     <br>
@@ -403,13 +415,13 @@
                 </div>
             </div>
             <div class="image-item">
-                <img src="images/results/aptnightcrop.jpg" alt="Description of Image 1">
+                <img src="images/results/aptnight.jpg" alt="Description of Image 1">
                 <div class="description"> 
                     Apt at night. 
                     <br> 
                     We can notice here that some automatic light balancing done by the iPhone  
                     makes the two images have different levels of lighting. When lighting has a larger
-                    difference, normal average-blending methods have noticeable artifacts.
+                    difference, the mosaic has artifacts.
                 </div>
             </div>
             <div class="image-item">
@@ -420,5 +432,340 @@
             </div>
         </div>
     </div>
+
+    <div class="gallery-container">
+        <div class="gallery-header">
+            <h3> Smoothing Images: Comments </h3>
+            You might've noticed in the last mosaic that there is a wedge shaped darkness in the middle of the sky.
+            <br>
+            The specific reason for that set of images is because the automatic contrast / brightness balancing done by the iPhone causes these two images
+            to have significantly different brightness, despite being taken very close to each other.
+            <br>
+            For this project, several different blending methods were implemented; here is a small display.
+            <br>
+            Shown below are some Euclidean distance maps.
+            </p>
+        </div>
+
+        <div class="two-images">
+            <div class="image-item">
+                <img src="images/blend/euclidean_im2.png" alt="Description of Image 1">
+                <div class="description"> 
+                    Here is an image of Euclidean distance to the edge for each pixel. Pixels at the center of the image are brighter than 
+                    those at the edge.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/blend/euclidean_warp.png" alt="Description of Image 1">
+                <div class="description"> 
+                </div>
+            </div>
+        </div>
+
+        <div class="two-images">
+            <div class="image-item">
+                <img src="images/blend/weighted_dist_im2.png" alt="Description of Image 1">
+                <div class="description"> 
+                    At each pixel, take the Euclidean distance to the edge of the first image, compared to the Euclidean distance to the edge of the second image.
+                    Use that as weights for colorization of the blended image.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/blend/weighted_dist_warp.png" alt="Description of Image 1">
+                <div class="description"> 
+                </div>
+            </div>
+        </div>
+
+        <div class="three-images">
+            <div class="image-item">
+                <img src="images/blend/sigmoid18.png" alt="Description of Image 1">
+                <div class="description"> 
+                    By applying a sigmoid function (used strength = 18
+                    \(
+                        \frac{1}{1 + e^{-18x + 9}}
+                    \)
+                    ), a smaller difference in distances has a larger effect on the weight. 
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/blend/sigmoid_im1.png" alt="Description of Image 1">
+                <div class="description"> 
+                    For example, if a pixel is 100 away from the edge in img1, but 150 away from the edge in img2, 
+                    the usual distance weighting would put the weights as 0.4 img1, 0.6 img2. However, this sigmoid transform
+                    would change the weights to ~0.05 img1, ~0.95 img2.
+                    <br>
+                    This primarily raises the weight of areas where the ratio is high, and also smooths out areas where both images have
+                    very low distance. For example, two adjacent pixels might have distances to im1, im2 as: (1, 10) and (1, 11). With the smoothing of the sigmoid function, 
+                    where it saturates near the ends, these two pixels will have nearly the same weight for image2.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/blend/sigmoid_warp.png" alt="Description of Image 1">
+                <div class="description"> 
+                    It works out as changing this distance transform mask shape, seen above here, for both images.
+                    <br>
+                    In the next row of images, see how the blending and the wedge of darkness that comes from different brightness come together.
+                </div>
+            </div>
+        </div>
+
+        <div class="three-images">
+            <div class="image-item">
+                <img src="images/results/aptnight_naive.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    A naive blending method, that does a flat average in the overlap area.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/results/aptnight_no_sigmoid.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    The distance based method, with only distance weighting.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/results/aptnight.jpg" alt="Description of Image 1">
+                <div class="description"> 
+                    A sigmoid function applied to the distance weights.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="gallery-container">
+        <div class="gallery-header">
+            <h3> Part B: Automatic Mosaic Stitching </h3>
+            <p>
+                As described in class and specified by the paper 'Multi-Image Matching using Multi-Scale Oriented Patches'.
+                <br> 
+                An automatic panoroma stitching function, that detects Harris corner features, uses Adaptive Non-Maximal Suppression 
+                algorithm to pare down corners and space them evenly across the image, and random sample consensus (RANSAC).
+                <br> 
+                BELLS AND WHISTLES: We use multi-scale Harris corner features, by implementing a Gaussian pyramid. 
+                <br>
+                As described in the paper, we 
+                subsample by a factor of 2 and use \(\sigma = 1.0\) for the Gaussian kernel.
+                <br> 
+                Side note: Instead of a hard threshold, the implementation here opts for a pre-filtering mechanism before ANMS of "z-score pruning";
+                <br> 
+                for most of the images, we use \(z=2\), and filter out pixels whose Harris values are less than \( \mu_h + z \sigma_h \).
+        </p>
+        </div>
+
+        <!-- Taj -->
+        <div class="two-images">
+            <div class="image-item">
+                <img src="images/results/auto_apt12.jpg" alt="Description of Image 3">
+                <div class="description"> 
+                    The automatic stitching of Apt1 and 2!
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/results/apt12.jpg" alt="Description of Image 2">
+                <div class="description"> 
+                    Compare with the previous, manual stitching.
+                </div>
+            </div>
+        </div>
+
+        <div class="three-images">
+            <div class="image-item">
+                <img src="images/autovis/level0_filter.png" alt="Description of Image 1">
+                <div class="description"> 
+                    Level 0 of Gaussian pyramid; Initial harris points before ANMS (zoom in to see red dots)
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/autovis/level0_anms.png" alt="Description of Image 3">
+                <div class="description"> 
+                    Level 0; After ANMS.
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/autovis/level0_patches.png" alt="Description of Image 2">
+                <div class="description"> 
+                    Level 0; Patches. (skio being low quality in the save.)
+                </div>
+            </div>
+        </div>
+
+        <div class="three-images">
+            <div class="image-item">
+                <img src="images/autovis/level2_filter.png" alt="Description of Image 1">
+                <div class="description"> 
+                    Level 2 of Gaussian pyramid; Initial harris points before ANMS (zoom in to see red dots)
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/autovis/level2_anms.png" alt="Description of Image 3">
+                <div class="description"> 
+                    Level 2; After ANMS. Notice that different features are being selected!
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/autovis/level2_patches.png" alt="Description of Image 2">
+                <div class="description"> 
+                    Level 2 Patches
+                </div>
+            </div>
+        </div>
+
+        <div class="two-images">
+            <div class="image-item">
+                <img src="images/autovis/level3_patches.png" alt="Description of Image 1">
+                <div class="description"> 
+                    Level 3 Patches
+                </div>
+            </div>
+        </div>
+
+        <div class="three-images">
+            <div class="image-item">
+                <img src="images/autovis/level0_patches2.png" alt="Description of Image 1">
+                <div class="description"> 
+                    The other images' patches at level 0 
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/autovis/level2_patches2.png" alt="Description of Image 3">
+                <div class="description"> 
+                    The other images' patches at level 2
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/autovis/level3_patches2.png" alt="Description of Image 2">
+                <div class="description"> 
+                    The other images' patches at level 3. Note some features at this level match very well with 
+                    the other image— see the top of the left building.
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="gallery-container">
+    <div class="gallery-header">
+        <h3> Continued Results </h3>
+        <p>
+    </p>
+    </div>
+
+    <!-- Taj -->
+    <div class="two-images">
+        <div class="image-item">
+            <img src="images/results/auto_apt23.jpg" alt="Description of Image 3">
+            <div class="description"> 
+                The automatic stitching of Apt2 and 3!
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/results/apt23.jpg" alt="Description of Image 2">
+            <div class="description"> 
+                Compare with the previous, manual stitching.
+            </div>
+        </div>
+    </div>
+
+    <div class="two-images">
+        <div class="image-item">
+            <img src="images/results/auto_apt123.jpg" alt="Description of Image 3">
+            <div class="description"> 
+                The automatic stitching of Apt1 and Apt2 and 3!
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/results/onetwothree.jpg" alt="Description of Image 2">
+            <div class="description"> 
+                Compare with the previous, manual stitching.
+            </div>
+        </div>
+    </div>
+
+    <div class="three-images">
+        <div class="image-item">
+            <img src="images/extra_dudes1.jpg" alt="Description of Image 3">
+            <div class="description"> 
+                Some dudes
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/extra_dudes.jpg" alt="Description of Image 3">
+            <div class="description"> 
+                The automatic stitch
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/extra_dudes2.jpg" alt="Description of Image 2">
+            <div class="description"> 
+                Other dudes
+            </div>
+        </div>
+    </div>
+
+    <div class="three-images">
+        <div class="image-item">
+            <img src="images/extra_a1.jpeg" alt="Description of Image 3">
+            <div class="description"> 
+                Walking back from LKS
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/extra_a.jpg" alt="Description of Image 3">
+            <div class="description"> 
+                The automatic stitch. Ghostly people get duplicated.
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/extra_a2.jpeg" alt="Description of Image 2">
+            <div class="description"> 
+                Shifted angle
+            </div>
+        </div>
+    </div>
+
+    <div class="three-images">
+        <div class="image-item">
+            <img src="images/extra_b1.jpeg" alt="Description of Image 3">
+            <div class="description"> 
+                Walking back from LKS
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/extra_b.jpg" alt="Description of Image 3">
+            <div class="description"> 
+                The automatic stitch. 
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/extra_b2.jpeg" alt="Description of Image 2">
+            <div class="description"> 
+                Shifted angle
+            </div>
+        </div>
+    </div>
+
+    <div class="three-images">
+        <div class="image-item">
+            <img src="images/extra_c1.jpeg" alt="Description of Image 3">
+            <div class="description"> 
+                Walking back from LKS
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/extra_c.jpg" alt="Description of Image 3">
+            <div class="description"> 
+                The automatic stitch. This one is interesting because the original photos were taken with 0.5 lens, introducing some inherent
+                warping in the original images— and it's especially clear with a close object.
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/extra_c2.jpeg" alt="Description of Image 2">
+            <div class="description"> 
+                Shifted angle
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
+
