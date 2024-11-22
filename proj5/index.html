@@ -1,0 +1,1554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> CS180 Project 5 Image Gallery</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script>
+        window.MathJax = {
+          tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']], // For inline math
+            displayMath: [['$$', '$$'], ['\\[', '\\]']], // For display math
+            tags: 'all', // Enables equation numbering across the document
+            packages: { '[+]': ['ams'] } // Adds support for AMS environments like `equation`
+          }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: "Times New Roman", Times, serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        header {
+            background-color: #f4f4f4;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 2px solid #4b4b4b;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            color: #000000;
+        }
+        header h2 {
+            margin-top: 10px;
+            font-size: 1.5em;
+            color: #000000;
+        }
+        header p {
+            margin-top: 15px;
+            margin-bottom: 20px;
+            font-size: 1em;
+            color: #000000;
+        }
+        .gallery-container {
+            margin: 40px;
+            border: 10px solid #d4af37;
+            border-radius: 15px;
+            background: #f3e9dc;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5),
+                        0 0 0 15px rgba(228, 228, 227, 0.6),
+                        inset 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+        /* Grid layout for seven images */
+        .seven-images {
+            display: grid;
+            grid-template-columns: repeat(9, 1fr); /* 3 equal columns */
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .seven-images .image-item:nth-child(1) {
+            grid-column: 2 / 3
+        }
+        .five-small-images {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .five-small-images .image-item:nth-child(1) {
+            grid-column: 2 / 3
+        }
+        /* Grid layout for four images */
+        .four-images {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* 3 equal columns */
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .four-small-images {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .four-small-images .image-item:nth-child(1) {
+            grid-column: 3 / 4
+        }
+        /* Grid layout for three images */
+        .three-images {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3 equal columns */
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .three-small-images {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .three-small-images .image-item:nth-child(1) {
+            grid-column: 3 / 4
+        }
+        /* Grid layout for two images */
+        .two-images {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3 equal columns */
+            gap: 10px;
+        }
+        /* Center the two images in the grid by leaving an empty column on both sides */
+        .two-images .image-item:nth-child(1) {
+            grid-column: 2 / 3; /* First image goes in the center column */
+        }
+        .two-images-center {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* 3 equal columns */
+            gap: 10px;
+        }
+        .two-images-center .image-item:nth-child(1) {
+            grid-column: 2 / 3; /* First image goes in the center column */
+        }
+        /* Shared image item styling */
+        .image-item img {
+            width: 100%;
+            height: auto;
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: cover;
+            border-radius: 0; /* Removes rounded corners */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        }
+        .gallery-header {
+            grid-column: span 3; /* Header spans all columns */
+            text-align: center;
+            margin-bottom: 5px;
+        }
+        .gallery-header h3 {
+            margin: 0;
+            font-size: 1.2em;
+            color: #000000;
+        }
+        .gallery-header p {
+            margin: 100px;
+            margin-top: 5px;
+            margin-bottom: 20px;
+            font-size: 1em;
+            color: #000000;
+        }
+        .description {
+            margin-top: 5px;
+            font-size: 14px;
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .discussion-section {
+            background-color: #f9f9f9;
+            padding-left: 250px;
+            padding-right: 250px;
+            margin-top: 10px;
+        }
+        .discussion-section h2 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #000000;
+        }
+        .discussion-section p {
+            font-size: 1em;
+            color: #000000;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <h1> Diffusion </h1>
+        <h2> CS180, Joshua Liao </h2>
+        <p> 
+            Playing with Diffusion Models
+        </p>
+    </header>
+
+    <!-- Image Gallery Section -->
+    <div class="gallery-container">
+        <div class="gallery-header">
+            <h3> Part 0: Setup </h3>
+            <p>
+            In this project, we use the <a href="https://huggingface.co/DeepFloyd/IF-I-XL-v1.0">DeepFloyd IF</a> diffusion model, a two stage model trained by Stability AI. 
+            <br>
+            The first stage takes in a text prompt, and outputs a 64x64 image. The second stage takes in a 64x64 stage and upsamples it to 256x256. 
+            <br> 
+            The main parameter that can be adjusted is <code>num_inference_steps</code>, which controls how many "denoising steps" to take. The high level summary is that 
+            a diffusion model is trained to remove noise from an image, and it "generates" novel images by taking some number of denoising steps on complete noise. 
+            (You can think of noise for images as more and more grainy images).
+            More steps means higher quality, but more computation time. 
+            <br>
+            Below, you can see three different prompts to the diffusion model, in increasing number of denoising steps. 
+            <br> We use <code>seed=18010</code> (which is also used for the rest of the project). 
+            </p>
+        </div>
+
+        <div class="three-small-images">
+            <div class="image-item">
+                <img src="images/part0/hat5.png" alt="Description of Image 1">
+                <div class="description"> 
+                    'a man wearing a hat', <br> <code>steps = 5</code>
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/part0/oil5.png" alt="Description of Image 1">
+                <div class="description"> 
+                    'an oil painting of a snowy mountain village', <br> <code>steps = 5</code>
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/part0/rocket5.png" alt="Description of Image 1">
+                <div class="description"> 
+                    'a rocket ship', <br> <code>steps = 5</code>
+                </div>
+            </div>
+        </div>
+
+        <div class="three-small-images">
+            <div class="image-item">
+                <img src="images/part0/hat10.png" alt="Description of Image 1">
+                <div class="description"> 
+                    'a man wearing a hat', <br> <code>steps = 10</code>
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/part0/oil10.png" alt="Description of Image 1">
+                <div class="description"> 
+                    'an oil painting of a snowy mountain village', <br> <code>steps = 10</code>
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/part0/rocket10.png" alt="Description of Image 1">
+                <div class="description"> 
+                    'a rocket ship', <br> <code>steps = 10</code>
+                </div>
+            </div>
+        </div>
+
+        <div class="three-small-images">
+            <div class="image-item">
+                <img src="images/part0/hat20.png" alt="Description of Image 1">
+                <div class="description"> 
+                    'a man wearing a hat', <br> <code>steps = 20</code>
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/part0/oil20.png" alt="Description of Image 1">
+                <div class="description"> 
+                    'an oil painting of a snowy mountain village', <br> <code>steps = 20</code>
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/part0/rocket20.png" alt="Description of Image 1">
+                <div class="description"> 
+                    'a rocket ship', <br> <code>steps = 20</code>
+                </div>
+            </div>
+        </div>
+
+        <div class="three-small-images">
+            <div class="image-item">
+                <img src="images/part0/hat40.png" alt="Description of Image 1">
+                <div class="description"> 
+                    'a man wearing a hat', <br> <code>steps = 40</code>
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/part0/oil40.png" alt="Description of Image 1">
+                <div class="description"> 
+                    'an oil painting of a snowy mountain village', <br> <code>steps = 40</code>
+                </div>
+            </div>
+            <div class="image-item">
+                <img src="images/part0/rocket40.png" alt="Description of Image 1">
+                <div class="description"> 
+                    'a rocket ship', <br> <code>steps = 40</code>
+                </div>
+            </div>
+        </div>
+
+        <div class="gallery-container">
+            <div class="gallery-header">
+                <h3> Comments </h3> <p>
+                In the lowest level of steps (5), you can see the repetitive texture that hasn't been smoothed out. Diffusion models generate from pure noise, 
+                but the fact that the texture covers the entire image seems to suggest that this pattern isn't from the noise, but the unrefined textures introduced
+                by the model. 
+                <br> 
+                The higher levels of steps do have increased quality, but it quickly reaches diminishing returns. Interestingly, at the highest number of steps,
+                the rocket ship prompt seems to regress, being more cartoon like. However, the other two prompts seem to get sharpened and more detailed. 
+                </p>
+            </div>
+        </div>
+</div>
+
+<div class="gallery-container">
+    <div class="gallery-header">
+        <h3> Part 1: Sampling Loops </h3>
+        In the next few parts, we sample the DeepFloyd denoiser model for different applications.
+    </div>
+</div>
+
+<div class="gallery-container">
+    <div class="gallery-header">
+        <h3> 1.1 Forward Process </h3> <p>
+        As discussed earlier, diffusion models are trained to remove noise from an image. An important part of diffusion is adding noise. The forward process
+        can be described by:  <br>
+
+        \(
+            \begin{equation}
+            x_t = \sqrt{\bar{\alpha_t}}x_0 + \sqrt{1 - \bar{\alpha_t}}\epsilon
+            \end{equation}
+        \)
+
+        <br>
+
+        Where \( \epsilon \sim N(0, 1) \), and \( \bar{\alpha}_t \) are hyperparameters that control the variance and mean over time.
+        In this project, we use DeepFloyd's hyperparams.
+
+        <br> 
+        Below, a visual example of the forward noise is shown.
+        </p>
+    </div>
+
+    <div class="four-small-images">
+        <div class="image-item">
+            <img src="images/forward/test.png" alt="Description of Image 1">
+            <div class="description"> 
+                A 64x64 image of the Berkeley Campanile.
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/forward/250.png" alt="Description of Image 1">
+            <div class="description"> 
+                250 steps of noise.
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/forward/500.png" alt="Description of Image 1">
+            <div class="description"> 
+                500 steps of noise.
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/forward/750.png" alt="Description of Image 1">
+            <div class="description"> 
+                750 steps of noise.
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="gallery-container">
+    <div class="gallery-header">
+        <h3> 1.2 Classical Denoising </h3>
+        Classical denoising uses blurring, applying a low frequency filter, typically Gaussian. Noise is usually some high frequency perturbations that 
+        we hope blurring will remove. This doesn't work well with higher levels of noise. Below, you can see examples of Gaussian blurring applied until most of the noise
+        is not observable (chosen by manual inspection).
+    </div>
+
+    <div class="three-small-images">
+        <div class="image-item">
+            <img src="images/forward/250.png" alt="Description of Image 1">
+            <div class="description"> 
+                250 steps of noise.
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/forward/500.png" alt="Description of Image 1">
+            <div class="description"> 
+                500 steps of noise.
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/forward/750.png" alt="Description of Image 1">
+            <div class="description"> 
+                750 steps of noise.
+            </div>
+        </div>
+    </div>
+
+    <div class="three-small-images">
+        <div class="image-item">
+            <img src="images/denoise/250_gauss23.png" alt="Description of Image 1">
+            <div class="description"> 
+                Gaussian filter to 250 steps; kernel len 23, \( \sigma = \frac{23}{6} \) 
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/denoise/500_gauss31.png" alt="Description of Image 1">
+            <div class="description"> 
+                Gaussian filter to 500 steps; kernel len 31, \( \sigma = \frac{31}{6} \) 
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/denoise/750_gauss37.png" alt="Description of Image 1">
+            <div class="description"> 
+                Gaussian filter to 750 steps; kernel len 37, \( \sigma = \frac{37}{6} \) 
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="gallery-container">
+    <div class="gallery-header">
+        <h3> 1.3 Implementing One Step Denoising </h3> <p>
+        We can utilize the off-the-shelf DeepFloyd model to remove noise. We can do this denoising with one step, 
+        by rearranging the forward process equation: <br>
+        
+        \( 
+            \begin{align} 
+            x_t &= \sqrt{\bar{\alpha_t}}x_0 + \sqrt{1 - \bar{\alpha_t}}\epsilon \nonumber \\ 
+            \sqrt{\bar{\alpha_t}}x_0 & = x_t - \sqrt{1 - \bar{\alpha_t}}\epsilon \nonumber \\ 
+            x_0' &= \frac{x_t - \sqrt{1 - \bar{\alpha_t}} * \tilde{\epsilon}}{\sqrt{\bar{\alpha_t}}}
+            \end{align}
+        \) <br>
+
+        Where, in equation (2), we use \( \tilde{\epsilon} \) to show that we are using the model's estimate of the noise, 
+        and \(x_0' \) to show that this is an estimate of the clean image. 
+        <br> Our belief of the "clean image" is an estimate 
+        of the image at time 0 in a forward noise process.
+        <br> 
+        Notice in the images below that you can hardly see anything!
+        </p>    
+    </div>
+
+    <div class="three-small-images">
+        <div class="image-item">
+            <img src="images/forward/250.png" alt="Description of Image 1">
+            <div class="description"> 
+                250 steps of noise.
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/forward/500.png" alt="Description of Image 1">
+            <div class="description"> 
+                500 steps of noise.
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/forward/750.png" alt="Description of Image 1">
+            <div class="description"> 
+                750 steps of noise.
+            </div>
+        </div>
+    </div>
+
+    <div class="three-small-images">
+        <div class="image-item">
+            <img src="images/denoise/250_gauss23.png" alt="Description of Image 1">
+            <div class="description"> 
+                Gaussian filter to 250 steps; kernel len 23, \( \sigma = \frac{23}{6} \) 
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/denoise/500_gauss31.png" alt="Description of Image 1">
+            <div class="description"> 
+                Gaussian filter to 500 steps; kernel len 31, \( \sigma = \frac{31}{6} \) 
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/denoise/750_gauss37.png" alt="Description of Image 1">
+            <div class="description"> 
+                Gaussian filter to 750 steps; kernel len 37, \( \sigma = \frac{37}{6} \) 
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="gallery-container">
+    <div class="gallery-header">
+        <h3> 1.4 Iterative Denoising </h3>
+        Diffusion models are trained to denoise step by step. In practice, this is expensive; if our goal is to take 1000 steps of denoising from 
+        pure noise, then we would have to run the model 1000 times (each step time conditioned). Instead, we can take strided steps; here we start
+        from 990, and take strided steps of 30. The formula to do strided steps is given as: 
+
+        \(
+            \begin{equation}
+                x_{t'}  = 
+                    \frac{\sqrt{\bar{\alpha}_{t'}}\beta_t}{1 - \bar{\alpha}_t} x_0
+                    +
+                    \frac{\sqrt{\alpha_t}(1 - \bar{\alpha}_{t'})}{1 - \bar{\alpha}_t} x_t 
+                    +
+                    v_\sigma
+            \end{equation}
+        \)
+        
+        Where here \( x_{t'}, x_t \) denote the denoised image at times \( t' < t \), \( \bar{\alpha}_t \) are DeepFloyd's hyperparameters that control the noise
+        per timestep, \( \alpha_t = \frac{\bar{\alpha}_t}{\bar{\alpha}_{t'}}, \ \beta_t = 1 - \alpha_t \), and \( x_0 \) is our estimate of the clean image at time zero 
+        according to equation (2) from the one-step denoising. \( v_\sigma \) represents random noise or variance; DeepFloyd's diffusion model also predicts this as 
+        one of its outputs. 
+        <br>
+        This equation can be interpeted as linear interpolation or a Bellmen-esque learning of what \( x_0 \) should be. 
+        <br>
+        Every timestep, we replace a portion of our current
+        state or belief (the noisy image) with our prediction of the clean image. 
+        <br> 
+        Note that this process is ultimately probabilistic; below, you can see the iterative process of denoising for one sample of the model, but you can also
+        see another finished sample as well. Notice how the end image's realism is quite good, but only the big ideas or largest features are kept (a white tower, landscape),
+        but the minute details are lost. This is expected because of how much information is lost to the noise. We can see that it is much better than our previous 
+        denoising strategies with the one-step and Gaussian methods.
+    </div>
+
+    <div class="five-small-images">
+        <div class="image-item">
+            <img src="images/denoise/iterative_90.png" alt="Description of Image 1">
+            <div class="description"> 
+                Noisy Campanile at t=90
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/denoise/iterative_240.png" alt="Description of Image 1">
+            <div class="description"> 
+                Noisy Campanile at t=240
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/denoise/iterative_390.png" alt="Description of Image 1">
+            <div class="description"> 
+                Noisy Campanile at t=390
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/denoise/iterative_540.png" alt="Description of Image 1">
+            <div class="description"> 
+                Noisy Campanile at t=540
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/denoise/iterative_690.png" alt="Description of Image 1">
+            <div class="description"> 
+                Noisy Campanile at t=690
+            </div>
+        </div>
+    </div>
+
+    <div class="five-small-images">
+        <div class="image-item">
+            <img src="images/forward/test.png" alt="Description of Image 1">
+            <div class="description"> 
+                Ground truth original image
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/denoise/part4_iterative.png" alt="Description of Image 1">
+            <div class="description"> 
+                The iteratively denoised Campanile, after above steps
+            </div> 
+        </div>
+        <div class="image-item">
+            <img src="images/denoise/part4_alt_iterative.png" alt="Description of Image 1">
+            <div class="description"> 
+                Another sample for a denoised Campanile, from a different noised start.
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/denoise/part4_onestep.png" alt="Description of Image 1">
+            <div class="description"> 
+                One-step denoised
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/denoise/part4_gauss.png" alt="Description of Image 1">
+            <div class="description"> 
+                Gaussian blurred
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="gallery-container">
+    <div class="gallery-header">
+        <h3> 1.5 Diffusion Model Sampling </h3>
+        Now, instead of generating a noisy image from a real image, we can just give the diffusion model complete noise and see what it generates.
+        We prompt the model with "a high quality photo" to get slightly better results. However, without additional tricks, the diffusion model does 
+        not have great results. Below, we showcase 5 samples, generated from denoising completely random noise. Both the 64x64 sample is shown and the 
+        upsampled 256x256 version using the second stage of the DeepFloyd model.
+    </div>
+
+    <div class="five-small-images">
+        <div class="image-item">
+            <img src="images/diffusion_sample/1.png" alt="Description of Image 1">
+            <div class="description"> 
+                Sample 1
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/diffusion_sample/2.png" alt="Description of Image 1">
+            <div class="description"> 
+                Sample 2
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/diffusion_sample/3.png" alt="Description of Image 1">
+            <div class="description"> 
+                Sample 3
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/diffusion_sample/4.png" alt="Description of Image 1">
+            <div class="description"> 
+                Sample 4
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/diffusion_sample/5.png" alt="Description of Image 1">
+            <div class="description"> 
+                Sample 5
+            </div>
+        </div>
+    </div>
+
+    <div class="five-small-images">
+        <div class="image-item">
+            <img src="images/diffusion_sample/big1.png" alt="Description of Image 1">
+            <div class="description"> 
+                256x256 sample 1
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/diffusion_sample/big2.png" alt="Description of Image 1">
+            <div class="description"> 
+                256x256 sample 2
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/diffusion_sample/big3.png" alt="Description of Image 1">
+            <div class="description"> 
+                256x256 sample 3
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/diffusion_sample/big4.png" alt="Description of Image 1">
+            <div class="description"> 
+                256x256 sample 4
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/diffusion_sample/big5.png" alt="Description of Image 1">
+            <div class="description"> 
+                256x256 sample 5
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="gallery-container">
+    <div class="gallery-header">
+        <h3> 1.6 Classifier Free Guidance </h3>
+        One trick that has been discovered to improve diffusion model generation is classifier free guidance. The idea is that you can run noise estimates
+        from the model that are conditioned and unconditioned. For example, our conditioned prompt above was "a high quality photo"; but you could also prompt
+        with nothing: "", and get an unconditioned noise estimate from the model. Classifier free guidance works by implementing a modified noise estimate: 
+
+        \( \begin{equation}
+            \epsilon = \epsilon_{u} + \gamma(\epsilon_{c} - \epsilon_{u})
+            \end{equation}
+        \)
+
+        Where subscript c denotes conditioned, and u denotes unconditioned. For \( \gamma = 0\), we recover the conditional noise estimate, and for \( \gamma = 1 \), 
+        we get an unconditional noise estimate. CFG works by setting \( \gamma > 1 \); why this works is currently up to debate. 
+        <br> 
+        Personally, one way to interpret it is that by subtracting a large amount of unconditioned noise, 
+        you are amplifying the conditioning signal. Just as LLMs seem to encode data in a vector space, perhaps the noise also exists as a multidimensional vector.
+        Then the difference of the unconditioned noise and the conditioned noise represents the direction that encodes just the prompt's influence. 
+        <br> (This is like the 
+        discovering that the embedding of <code>'king' - 'man' + 'woman' = 'queen'</code>; here, <code>'conditioned' - 'unconditioned' = 'high quality photo'</code>, 
+        <br> with implied <code>'conditioned' = 'some_base_noise' + 'high quality photo'</code>). 
+        <br> Here, we use \( \gamma = 7 \); the noise estimate equals \( \epsilon_u + 7\epsilon_{\text{diff}} \). 
+        <br>
+        The results are better than above; the fifth sample in particular looks quite realistic.
+    </div>
+
+    <div class="five-small-images">
+        <div class="image-item">
+            <img src="images/diffusion_sample/cfg1.png" alt="Description of Image 1">
+            <div class="description"> 
+                CFG sample 1
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/diffusion_sample/cfg2.png" alt="Description of Image 1">
+            <div class="description"> 
+                CFG sample 2
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/diffusion_sample/cfg3.png" alt="Description of Image 1">
+            <div class="description"> 
+                CFG sample 3
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/diffusion_sample/cfg4.png" alt="Description of Image 1">
+            <div class="description"> 
+                CFG sample 4
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/diffusion_sample/cfg5.png" alt="Description of Image 1">
+            <div class="description"> 
+                CFG sample 5
+            </div>
+        </div>
+    </div>
+
+    <div class="five-small-images">
+        <div class="image-item">
+            <img src="images/diffusion_sample/cfg1big.png" alt="Description of Image 1">
+            <div class="description"> 
+                256x256 CFG sample 1
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/diffusion_sample/cfg2big.png" alt="Description of Image 1">
+            <div class="description"> 
+                256x256 CFG sample 2
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/diffusion_sample/cfg3big.png" alt="Description of Image 1">
+            <div class="description"> 
+                256x256 CFG sample 3
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/diffusion_sample/cfg4big.png" alt="Description of Image 1">
+            <div class="description"> 
+                256x256 CFG sample 4
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/diffusion_sample/cfg5big.png" alt="Description of Image 1">
+            <div class="description"> 
+                256x256 CFG sample 5
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="gallery-container">
+    <div class="gallery-header">
+        <h3> 1.7 Image-to-image Translation </h3>
+        Now we apply CFG generation to a slightly noised image, and then see what happens to it. We show decreasing amounts of noise added, 
+        using <code>i_start = [1, 3, 5, 7, 10, 20] </code>. Larger <code>i_start</code> corresponds with less noise and less strided steps. 
+        In the examples below, you can see that the earier steps are random generations, because there is too much noise. This algorithm is called
+        SDEdit.
+    </div>
+
+    <div class="seven-images">
+        <div class="image-item">
+            <img src="images/edits/tower1.png" alt="Description of Image 1">
+            <div class="description"> 
+                <code>i_start = 1 </code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/edits/tower3.png" alt="Description of Image 1">
+            <div class="description"> 
+                <code>i_start = 3 </code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/edits/tower5.png" alt="Description of Image 1">
+            <div class="description"> 
+                <code>i_start = 5 </code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/edits/tower7.png" alt="Description of Image 1">
+            <div class="description"> 
+                <code>i_start = 7 </code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/edits/tower10.png" alt="Description of Image 1">
+            <div class="description"> 
+                <code>i_start = 10 </code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/edits/tower20.png" alt="Description of Image 1">
+            <div class="description"> 
+                <code>i_start = 20 </code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/forward/test.png" alt="Description of Image 1">
+            <div class="description"> 
+                <code> Campanile </code>
+            </div>
+        </div>
+    </div>
+
+    <div class="seven-images">
+        <div class="image-item">
+            <img src="images/edits/cat1.png" alt="Description of Image 1">
+            <div class="description"> 
+                <code>i_start = 1 </code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/edits/cat3.png" alt="Description of Image 1">
+            <div class="description"> 
+                <code>i_start = 3 </code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/edits/cat5.png" alt="Description of Image 1">
+            <div class="description"> 
+                <code>i_start = 5 </code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/edits/cat7.png" alt="Description of Image 1">
+            <div class="description"> 
+                <code>i_start = 7 </code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/edits/cat10.png" alt="Description of Image 1">
+            <div class="description"> 
+                <code>i_start = 10 </code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/edits/cat20.png" alt="Description of Image 1">
+            <div class="description"> 
+                <code>i_start = 20 </code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/edits/cat.png" alt="Description of Image 1">
+            <div class="description"> 
+                <code> Cat </code>
+            </div>
+        </div>
+    </div>
+
+    <div class="seven-images">
+        <div class="image-item">
+            <img src="images/edits/dog1.png" alt="Description of Image 1">
+            <div class="description"> 
+                <code>i_start = 1 </code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/edits/dog3.png" alt="Description of Image 1">
+            <div class="description"> 
+                <code>i_start = 3 </code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/edits/dog5.png" alt="Description of Image 1">
+            <div class="description"> 
+                <code>i_start = 5 </code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/edits/dog7.png" alt="Description of Image 1">
+            <div class="description"> 
+                <code>i_start = 7 </code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/edits/dog10.png" alt="Description of Image 1">
+            <div class="description"> 
+                <code>i_start = 10 </code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/edits/dog20.png" alt="Description of Image 1">
+            <div class="description"> 
+                <code>i_start = 20 </code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/edits/dog.png" alt="Description of Image 1">
+            <div class="description"> 
+                <code> Dog </code>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="gallery-container">
+    <div class="gallery-header">
+        <h3> 1.7.1 Hand-Drawn, the Web </h3>
+        SDEdit can also be applied to hand-drawn photos to "realize" them as realistic images. Here are some examples.
+    </div>
+
+    <div class="seven-images">
+        <div class="image-item">
+            <img src="images/edits/firstdraw1.png" alt="Description of Image 1">
+            <div class="description"> 
+                <code>i_start = 1 </code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/edits/firstdraw3.png" alt="Description of Image 1">
+            <div class="description"> 
+                <code>i_start = 3 </code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/edits/firstdraw5.png" alt="Description of Image 1">
+            <div class="description"> 
+                <code>i_start = 5 </code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/edits/firstdraw7.png" alt="Description of Image 1">
+            <div class="description"> 
+                <code>i_start = 7 </code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/edits/firstdraw10.png" alt="Description of Image 1">
+            <div class="description"> 
+                <code>i_start = 10 </code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/edits/firstdraw20.png" alt="Description of Image 1">
+            <div class="description"> 
+                <code>i_start = 20 </code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/edits/firstdraw.png" alt="Description of Image 1">
+            <div class="description"> 
+                Drawing of mountains
+            </div>
+        </div>
+    </div>
+
+    <div class="seven-images">
+        <div class="image-item">
+            <img src="images/edits/secdraw1.png" alt="Description of Image 1">
+            <div class="description"> 
+                <code>i_start = 1 </code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/edits/secdraw3.png" alt="Description of Image 1">
+            <div class="description"> 
+                <code>i_start = 3 </code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/edits/secdraw5.png" alt="Description of Image 1">
+            <div class="description"> 
+                <code>i_start = 5 </code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/edits/secdraw7.png" alt="Description of Image 1">
+            <div class="description"> 
+                <code>i_start = 7 </code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/edits/secdraw10.png" alt="Description of Image 1">
+            <div class="description"> 
+                <code>i_start = 10 </code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/edits/secdraw20.png" alt="Description of Image 1">
+            <div class="description"> 
+                <code>i_start = 20 </code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/edits/secdraw.png" alt="Description of Image 1">
+            <div class="description"> 
+                Drawing of a tree
+            </div>
+        </div>
+    </div>
+
+    <div class="seven-images">
+        <div class="image-item">
+            <img src="images/edits/eiffel1.png" alt="Description of Image 1">
+            <div class="description"> 
+                <code>i_start = 1 </code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/edits/eiffel3.png" alt="Description of Image 1">
+            <div class="description"> 
+                <code>i_start = 3 </code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/edits/eiffel5.png" alt="Description of Image 1">
+            <div class="description"> 
+                <code>i_start = 5 </code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/edits/eiffel7.png" alt="Description of Image 1">
+            <div class="description"> 
+                <code>i_start = 7 </code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/edits/eiffel10.png" alt="Description of Image 1">
+            <div class="description"> 
+                <code>i_start = 10 </code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/edits/eiffel20.png" alt="Description of Image 1">
+            <div class="description"> 
+                <code>i_start = 20 </code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/edits/eiffel.png" alt="Description of Image 1">
+            <div class="description"> 
+                eiffel tower from the web
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="gallery-container">
+    <div class="gallery-header">
+        <h3> 1.7.2 Inpainting </h3>
+        In a similar vein, we can use diffusion to only re-generate parts of an image. This is done by allowing the model to predict noise for an entire image, and 
+        only using its noise estimate to update a portion of the image according to a mask. The rest of the image is treated differently, and noised by the forward
+        process instead (ie. we start with a noisy version of our ground truth, we allow the model to de-noise part of the image, then noise the ground truth image
+        to a smaller timestep \( t' < t \) and apply the iterative de-noising on the masked region only).
+        <br> 
+        Below, we show some results. 
+        <br>
+        <br>
+        For the Campanile, the diffusion model generates a new lighthouse-esque top. 
+        <br> 
+        <br>
+        For the cat, the diffusion model decides to 
+        replace the head with a baby's head. This is a pretty out-of-place generation, but we have to keep in mind that this is a novel non-training task for the 
+        DeepFloyd model. The noisy starting point most likely allowed the model to be "creative" by itself for too long, without a clear context of a cat.
+        <br>
+        <br>
+        For the dog, we use a different type of mask; kind of a "outpaint", where the model is allowed to draw around the head of the dog. Here, it also seems likely
+        that the model generates without much context of the dog early on, creating a woman's face around the dog's face. Interestingly it does seem to give the dog 
+        a bit of a bordered window, and the window does not map completely with the mask; notice on the left side the dog area pokes out.
+    </div>
+
+    <div class="four-small-images">
+        <div class="image-item">
+            <img src="images/inpaints/tower.png" alt="Description of Image 1">
+            <div class="description"> 
+                base campanile
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/inpaints/tower_mask.png" alt="Description of Image 1">
+            <div class="description"> 
+                mask used
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/inpaints/tower_replace.png" alt="Description of Image 1">
+            <div class="description"> 
+                replacement areas
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/inpaints/tower_inpaint.png" alt="Description of Image 1">
+            <div class="description"> 
+                inpaint via diffusion
+            </div>
+        </div>
+    </div>
+
+    <div class="four-small-images">
+        <div class="image-item">
+            <img src="images/inpaints/cat.png" alt="Description of Image 1">
+            <div class="description"> 
+                base cat
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/inpaints/cat_mask.png" alt="Description of Image 1">
+            <div class="description"> 
+                mask used
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/inpaints/cat_replace.png" alt="Description of Image 1">
+            <div class="description"> 
+                replacement areas
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/inpaints/cat_inpaint.png" alt="Description of Image 1">
+            <div class="description"> 
+                inpaint via diffusion
+            </div>
+        </div>
+    </div>
+
+    <div class="four-small-images">
+        <div class="image-item">
+            <img src="images/inpaints/dog.png" alt="Description of Image 1">
+            <div class="description"> 
+                base dog
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/inpaints/dog_mask.png" alt="Description of Image 1">
+            <div class="description"> 
+                mask used
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/inpaints/dog_replace.png" alt="Description of Image 1">
+            <div class="description"> 
+                replacement areas
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/inpaints/dog_inpaint.png" alt="Description of Image 1">
+            <div class="description"> 
+                inpaint via diffusion
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="gallery-container">
+    <div class="gallery-header">
+        <h3> 1.7.3 Text-conditional Image-to-image Translation </h3>
+        The SDEdit algorithm (take an image, add noise, "project" to the image manifold via diffusion) can also be used with a different prompt in the projection step.
+        This provides some guidance on how the model should re-generate or edit the image. Below, we show image-to-image translations, using the prompt 
+        'a lithograph of a waterfall' (A lithograph is an art form or printing method, using a plane and certain liquid properties).
+        <br> 
+        Particular interesting generations: Campanile at noise 10, Cat at noise 20, Dog at noise 20.
+    </div>
+
+    <div class="seven-images">
+        <div class="image-item">
+            <img src="images/text_conditioned/tower/1.png" alt="Description of Image 1">
+            <div class="description"> 
+                Waterfall <br> <code>i_start = 1</code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/text_conditioned/tower/3.png" alt="Description of Image 1">
+            <div class="description"> 
+                Waterfall <br> <code>i_start = 3</code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/text_conditioned/tower/5.png" alt="Description of Image 1">
+            <div class="description"> 
+                Waterfall <br> <code>i_start = 5</code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/text_conditioned/tower/7.png" alt="Description of Image 1">
+            <div class="description"> 
+                Waterfall <br> <code>i_start = 7</code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/text_conditioned/tower/10.png" alt="Description of Image 1">
+            <div class="description"> 
+                Waterfall <br> <code>i_start = 10</code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/text_conditioned/tower/20.png" alt="Description of Image 1">
+            <div class="description"> 
+                Waterfall <br> <code>i_start = 20</code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/inpaints/tower.png" alt="Description of Image 1">
+            <div class="description"> 
+                Campanile
+            </div>
+        </div>
+    </div>
+
+    <div class="seven-images">
+        <div class="image-item">
+            <img src="images/text_conditioned/cat/1.png" alt="Description of Image 1">
+            <div class="description"> 
+                Waterfall <br> <code>i_start = 1</code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/text_conditioned/cat/3.png" alt="Description of Image 1">
+            <div class="description"> 
+                Waterfall <br> <code>i_start = 3</code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/text_conditioned/cat/5.png" alt="Description of Image 1">
+            <div class="description"> 
+                Waterfall <br> <code>i_start = 5</code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/text_conditioned/cat/7.png" alt="Description of Image 1">
+            <div class="description"> 
+                Waterfall <br> <code>i_start = 7</code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/text_conditioned/cat/10.png" alt="Description of Image 1">
+            <div class="description"> 
+                Waterfall <br> <code>i_start = 10</code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/text_conditioned/cat/20.png" alt="Description of Image 1">
+            <div class="description"> 
+                Waterfall <br> <code>i_start = 20</code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/inpaints/cat.png" alt="Description of Image 1">
+            <div class="description"> 
+                Cat
+            </div>
+        </div>
+    </div>
+
+    <div class="seven-images">
+        <div class="image-item">
+            <img src="images/text_conditioned/dog/1.png" alt="Description of Image 1">
+            <div class="description"> 
+                Waterfall <br> <code>i_start = 1</code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/text_conditioned/dog/3.png" alt="Description of Image 1">
+            <div class="description"> 
+                Waterfall <br> <code>i_start = 3</code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/text_conditioned/dog/5.png" alt="Description of Image 1">
+            <div class="description"> 
+                Waterfall <br> <code>i_start = 5</code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/text_conditioned/dog/7.png" alt="Description of Image 1">
+            <div class="description"> 
+                Waterfall <br> <code>i_start = 7</code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/text_conditioned/dog/10.png" alt="Description of Image 1">
+            <div class="description"> 
+                Waterfall <br> <code>i_start = 10</code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/text_conditioned/dog/20.png" alt="Description of Image 1">
+            <div class="description"> 
+                Waterfall <br> <code>i_start = 20</code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/inpaints/dog.png" alt="Description of Image 1">
+            <div class="description"> 
+                Dog
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="gallery-container">
+    <div class="gallery-header">
+        <h3> 1.8 Visual Anagrams </h3>
+        Taking diffusion model tricks even farther, we can create visual anagrams with diffusion models. Here, we present images that look 
+        like one thing in a certain direction, and another image when flipped upside down! 
+        This is done by first by estimating noise while conditioning the model with prompt A, and then flipping the image and acquiring
+        the noise estimate while conditioning the model with prompt B. Averaging the noise estimate A, and the flipped noise estimate B, the image 
+        generated with develop along both prompts at the same time. This is described by:
+        <br>
+        \( 
+            \begin{equation}
+                \epsilon = 0.5 (UNet(x_t, t, prompt_A)) + 0.5 flip((UNet(flip(x_t), t, prompt_B)))
+            \end{equation}
+        \)
+        <br> 
+        However, we use CFG for generating \( \epsilon_A, \epsilon_B \). Below, we show pairs of images representing visual anagrams.
+    </div>
+
+    <div class="four-small-images">
+        <div class="image-item">
+            <img src="images/anagram/oil_man_campfire.png" alt="Description of Image 1">
+            <div class="description"> 
+                <code>"an oil painting of an old man"</code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/anagram/oil_man_campfire_flip.png" alt="Description of Image 1">
+            <div class="description"> 
+                <code>"an oil painting of people around a campfire"</code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/anagram/oil_man_campfire2.png" alt="Description of Image 1">
+            <div class="description"> 
+                <code>"an oil painting of an old man"</code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/anagram/oil_man_campfire2_flip.png" alt="Description of Image 1">
+            <div class="description"> 
+                <code>"an oil painting of people around a campfire"</code>
+            </div>
+        </div>
+    </div>
+
+    <div class="four-small-images">
+        <div class="image-item">
+            <img src="images/anagram/litho_waterfall_skull.png" alt="Description of Image 1">
+            <div class="description"> 
+                <code>"a lithograph of waterfalls"</code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/anagram/litho_waterfall_skull_flip.png" alt="Description of Image 1">
+            <div class="description"> 
+                <code>"a lithograph of a skull"</code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/anagram/sunset_skull.png" alt="Description of Image 1">
+            <div class="description"> 
+                <code>"a lithograph of a sunset"</code>
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/anagram/sunset_skull_flip.png" alt="Description of Image 1">
+            <div class="description"> 
+                <code>"a lithograph of a skull"</code>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="gallery-container">
+    <div class="gallery-header">
+        <h3> 1.9 Hybrid Images </h3>
+        Hybrid images look like one thing from up close, and another image from farther away. We can achieve this effect in diffusion by using a similar 
+        manipulation to above. Instead of flipping, we apply a low pass or high pass filter to different 
+        noise estimates:
+        \( \begin{equation} 
+            \epsilon = f_{lowpass} \epsilon_A + f_{highpass} \epsilon_B
+        \end{equation} \)
+    </div>
+
+    <div class="four-small-images">
+        <div class="image-item">
+            <img src="images/hybrid/skull_waterfall.png" alt="Description of Image 1">
+            <div class="description"> 
+                High Freq: waterfalls <br>
+                Low Freq: skull
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/hybrid/skull_sunset.png" alt="Description of Image 1">
+            <div class="description"> 
+                High Freq: sunset <br>
+                Low Freq: skull
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/hybrid/rocket_dog.png" alt="Description of Image 1">
+            <div class="description"> 
+                High Freq: dog <br>
+                Low Freq: rocket
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/hybrid/moon_waterfall.png" alt="Description of Image 1">
+            <div class="description"> 
+                High Freq: waterfalls <br>
+                Low Freq: moon (with tree branches?)
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="gallery-container">
+    <div class="gallery-header">
+        <h3> 2 Training UNets for MNIST </h3>
+        In the following parts, we train three different UNets for denoising MNIST images. 
+        See <a href="https://cal-cs180.github.io/fa24/hw/proj5/partb.html"> CS180 Proj5 Part B</a> spec for an in depth explanation of the simplified UNet architecture.
+        <br>
+        The first one is unconditioned; we train with noised MNIST images \( \sigma = 0.5 \).
+        <br> 
+        The next is time conditioned. We show samples from this neural net, generated by providing pure noise, and max time.
+        <br> 
+        The last is time and class conditioned. We show samples generated by noise and conditioned on a certain class.
+    </div>
+</div>
+
+<div class="gallery-container">
+    <div class="gallery-header">
+        <h3> 2.1 Unconditioned UNet </h3>
+        The unconditioned net was trained with noised MNIST images \( \sigma = 0.5 \), and trained for 5 epochs using PyTorch's builtin MNIST training dataset.
+        <br>
+        Below, we show the noising process used for training, the training loss curve, sample denoised images from the test set, 
+        and sample out-of-distribution denoised images.
+    </div>
+
+    <div class="two-images">
+        <div class="image-item">
+            <img src="images/partB/noise_process.png" alt="Description of Image 1">
+            <div class="description"> 
+                The noising process used for training; images taken from the training set. Images were noised according to 
+                \( x_t = x_0 + \sigma \epsilon; \epsilon \sim \mathcal{N}(0, 1) \)
+            </div>
+        </div>
+    </div>
+
+    <div class="two-images">
+        <div class="image-item">
+            <img src="images/partB/uncond_loss.png" alt="Description of Image 1">
+            <div class="description"> 
+                Log loss curve; 'epochs' on the x-axis should read 'batches' (size 256).
+            </div>
+        </div>
+    </div>
+    
+
+    <div class="two-images-center">
+        <div class="image-item">
+            <img src="images/partB/uncond_epoch1.png" alt="Description of Image 1">
+            <div class="description"> 
+                Sample denoised digits from the test set after the first epoch.
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/partB/uncond_epoch5.png" alt="Description of Image 1">
+            <div class="description"> 
+                Sample denoised digits from the test set after the fifth epoch.
+            </div>
+        </div>
+    </div>
+
+    <div class="two-images">
+        <div class="image-item">
+            <img src="images/partB/uncond_ood.png" alt="Description of Image 1">
+            <div class="description"> 
+                Out-of-distribution samples. noX.0 denotes the noised image at \( \sigma X.0 \); 
+                doX denotes the denoised version of that image using our unconditional model.
+                <br> The model was trained for denoising on \( \sigma = 0.5 \); it performs 
+                relatively well until \( \sigma = 1.0 \). 
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="gallery-container">
+    <div class="gallery-header">
+        <h3> 2.2.1 Time Conditioned UNet </h3>
+        For a real diffusion model, we need to condition on time. Here, we elect to learn a time embedding to add to the internal
+        representation of the UNet in the upsampling steps (the right side of the U), on the lower two levels. We use two different
+        fully connected blocks to learn the time embeddings. We run for 20 epochs. 
+        <br> During training, we randomly sample a time \( t \in [0, 300] \) to 
+        apply noise according to the forward process equation, and ask the model to denoise it completely. (The loss is mean squared error with 
+        the ground truth image).
+        <br> Note that we still sample the model with the iterative process. These samples are not the best; this is probably because during the 
+        sampling process, the model "has no way" to know or "decide" what class it is generating, and runs into some trouble.
+    </div>
+
+    <div class="two-images">
+        <div class="image-item">
+            <img src="images/partB/timecond_loss.png" alt="Description of Image 1">
+            <div class="description"> 
+                Log loss curve; 'epochs' on the x-axis should read 'batches' (size 128). 
+            </div>
+        </div>
+    </div>
+    <div class="two-images-center">
+        <div class="image-item">
+            <img src="images/partB/timecond_epoch5.png" alt="Description of Image 1">
+            <div class="description"> 
+                10 samples from epoch 5.
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/partB/timecond_epoch5.png" alt="Description of Image 1">
+            <div class="description"> 
+                10 samples from epoch 20.
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="gallery-container">
+    <div class="gallery-header">
+        <h3> 2.2.2 Class Conditioned UNet </h3>
+        To improve our time conditioned UNet, we can also condition on class! We use a one-hot vector to encode the class, and learn and inject  
+        a class embedding similar to the time embedding. However, we multiply the internal representation with our class embedding, and also train
+        with a chance to drop the conditioning information; \( p_{uncond} = 0.1 \) during training. (The model is forced to generalize its denoising.)
+        <br>
+        We show examples of all the classes (this time we can ask for specific digits from the model during iterative diffusion sampling!). The results
+        are much better!
+    </div>
+
+    <div class="two-images">
+        <div class="image-item">
+            <img src="images/partB/classcond_loss.png" alt="Description of Image 1">
+            <div class="description"> 
+                Log loss curve; 'epochs' on the x-axis should read 'batches' (size 128). 
+            </div>
+        </div>
+    </div>
+    <div class="two-images-center">
+        <div class="image-item">
+            <img src="images/partB/class_epoch1.png" alt="Description of Image 1">
+            <div class="description"> 
+                Samples from epoch 5.
+            </div>
+        </div>
+        <div class="image-item">
+            <img src="images/partB/class_epoch20.png" alt="Description of Image 1">
+            <div class="description"> 
+                Samples from epoch 20.
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>
+
